@@ -1,0 +1,11 @@
+com\example\registrationservice\messaging\RegistrationProducer.class
+com\example\registrationservice\model\RegistrationRequest.class
+com\example\registrationservice\feign\ActivityServiceClient.class
+com\example\registrationservice\controller\RegistrationController.class
+com\example\registrationservice\feign\UserServiceClient.class
+com\example\registrationservice\service\RegistrationService.class
+com\example\registrationservice\messaging\RegistrationConsumer.class
+com\example\registrationservice\repository\RegistrationRepository.class
+com\example\registrationservice\RegistrationServiceApplication.class
+com\example\registrationservice\model\Registration.class
+com\example\registrationservice\service\impl\RegistrationServiceImpl.class

@@ -1,0 +1,167 @@
+version: '3.8'
+
+services:
+  # Eureka Server - 服务注册中心（注释掉，使用本地构建的Eureka Server）
+  # eureka-server:
+  #   image: springcloud/eureka:3.1.0
+  #   container_name: eureka-server
+  #   ports:
+  #     - "8761:8761"
+  #   environment:
+  #     - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+  #     - EUREKA_CLIENT_FETCH_REGISTRY=false
+  #   networks:
+  #     - activity-registration-network
+
+  # MySQL - 数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=user_db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - activity-registration-network
+
+  # Redis - 缓存和限流服务
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - activity-registration-network
+
+  # Zookeeper - Kafka依赖
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    networks:
+      - activity-registration-network
+
+  # Kafka - 消息队列服务
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - activity-registration-network
+
+  # Kafka Manager - Kafka管理界面（可选）
+  kafka-manager:
+    image: hlebalbau/kafka-manager:3.0.0.5
+    container_name: kafka-manager
+    depends_on:
+      - kafka
+      - zookeeper
+    ports:
+      - "9000:9000"
+    environment:
+      - ZK_HOSTS=zookeeper:2181
+      - APPLICATION_SECRET=letmein
+    networks:
+      - activity-registration-network
+
+  # Prometheus - 监控服务（暂时注释掉）
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - activity-registration-network
+
+  # Grafana - 监控可视化界面（暂时注释掉）
+  # grafana:
+  #   image: grafana/grafana:9.5.2
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   depends_on:
+  #     - prometheus
+  #   networks:
+  #     - activity-registration-network
+
+  # Elasticsearch - 日志存储（ELK Stack，暂时注释掉）
+  # elasticsearch:
+  #   image: elasticsearch:7.17.0
+  #   container_name: elasticsearch
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms256m -Xmx256m
+  #   volumes:
+  #     - es_data:/usr/share/elasticsearch/data
+  #   networks:
+  #     - activity-registration-network
+
+  # Logstash - 日志收集（ELK Stack，暂时注释掉）
+  # logstash:
+  #   image: logstash:7.17.0
+  #   container_name: logstash
+  #   ports:
+  #     - "5044:5044"
+  #     - "9600:9600"
+  #   volumes:
+  #     - ./docker/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+  #     - ./docker/logstash/pipeline:/usr/share/logstash/pipeline
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - activity-registration-network
+
+  # Kibana - 日志可视化（ELK Stack，暂时注释掉）
+  # kibana:
+  #   image: kibana:7.17.0
+  #   container_name: kibana
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - activity-registration-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  kafka_data:
+  grafana_data:
+  es_data:
+
+networks:
+  activity-registration-network:
+    driver: bridge

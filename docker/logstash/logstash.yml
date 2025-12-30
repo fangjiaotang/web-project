@@ -1,0 +1,21 @@
+http.host: "0.0.0.0"
+path.config: /usr/share/logstash/pipeline
+path.logs: /var/log/logstash
+
+# 监控配置文件变化
+config.reload.automatic: true
+config.reload.interval: 30s
+
+# 队列设置
+queue.type: memory
+queue.max_bytes: 1gb
+queue.max_events: 10000
+
+# 过滤器设置
+filterworkers: 4
+pipeline.workers: 4
+pipeline.batch.size: 125
+pipeline.batch.delay: 50
+
+# JVM设置（在docker-compose中配置更合适）
+# JAVA_OPTS: "-Xms256m -Xmx512m"

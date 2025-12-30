@@ -1,0 +1,11 @@
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\model\Registration.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\RegistrationServiceApplication.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\service\impl\RegistrationServiceImpl.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\model\RegistrationRequest.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\service\RegistrationService.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\messaging\RegistrationConsumer.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\feign\UserServiceClient.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\controller\RegistrationController.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\feign\ActivityServiceClient.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\messaging\RegistrationProducer.java
+C:\Users\kang3\Desktop\web系统原理\新建文件夹\web project\microservices\registration-service\src\main\java\com\example\registrationservice\repository\RegistrationRepository.java
